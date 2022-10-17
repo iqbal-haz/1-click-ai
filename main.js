@@ -1,6 +1,10 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
-const path = require('path')
-let $ = require('jquery');
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const { JSDOM } = require( "jsdom" );
+const { default: axios } = require('axios');
+const { window } = new JSDOM( "" );
+const $ = require( "jquery" )( window );
+require('dotenv').config();
 
 let text;
 let win;
@@ -16,11 +20,9 @@ const createWindow = () => {
         }
     })
 
-    // win.$ = $;
-
     win.loadFile('index.html');
     win.webContents.openDevTools();
-    win.webContents.send("showText", text);
+    win.webContents.send("showText", text ? text : "text undefined");
 
 }
 
@@ -36,22 +38,17 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
-ipcMain.on("receiveData", (event, fulltxt) => {
-    text = fulltxt;
+ipcMain.on("receiveData", (event, formData) => {
+    axios.post(
+        process.env.HOST + '/',
+        formData,
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+    ).then((response) => {
+        let { img_path, fulltxt } = response;
+        text = response;z
+    })
 })
-
-// ipcMain.on("receiveData", (event, formData) => {
-//     let url = "http://127.0.0.1:5000";
-//     console.log("masuk AJAX")
-//     $.ajax({
-//         url: url + '/',
-//         type: 'POST',
-//         data: formData,
-//         contentType: false,
-//         processData: false,
-//         success: function(response) {
-//             let {img_path, fulltxt} = response;
-//             text = fulltxt;
-//         }
-//     });
-// });
