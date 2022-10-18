@@ -1,3 +1,4 @@
+const axios = require('axios');
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 require('dotenv').config();
@@ -49,9 +50,27 @@ app.on('activate', () => {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+/**
+ * Testing IP Communication by printing electron version
+ */
 ipcMain.handle("get-version", async (event, args) => {
   console.log(process.versions.electron);
   return process.versions.electron;
+})
+
+ipcMain.handle("convert-img-to-txt", async (event, data) => {
+  console.log(data);
+  let text;
+  axios.post(
+    process.env.HOST + "/",
+    data,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  ).then(function (response) {
+    text = response;
+  });
+  return text;
 })
