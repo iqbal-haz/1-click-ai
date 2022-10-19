@@ -60,17 +60,9 @@ ipcMain.handle("get-version", async (event, args) => {
 
 ipcMain.handle("convert-img-to-txt", async (event, data) => {
   console.log(data);
-  let text;
-  axios.post(
+  let text = await axios.post(
     process.env.HOST + "/",
     data,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }
-  ).then(function (response) {
-    text = response;
-  });
+  );
   return text;
 })

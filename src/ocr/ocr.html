@@ -14,11 +14,12 @@
             <p>Input an image of text and return the text value</p>
         </div>
         <div class="row my-4" id="form">
+            <div id="preview"></div>
             <form method="post" enctype="multipart/form-data">
                 <p>
-                    <input type="file" name="image" class="form-control" autocomplete="off" required id="image">
+                    <input type="file" name="image" class="form-control" autocomplete="off" required id="image" onchange="previewImage(event)">
                 </p>
-                <input type="submit" value="Extract text" class="btn btn-info" id="extract">
+                <input type="submit" value="Extract text" class="btn btn-info" id="extract" onclick="extractText(event)">
             </form>
         </div>
         <div id="result" style="color: blue; font-size: medium;"></div>
