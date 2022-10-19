@@ -1,5 +1,6 @@
 function extractText(event) {
     console.log("masuk extract text");
+    console.log(event.target.files[0]);
     let image = event.target.files[0];
     console.log(image);
     let formData = new FormData();

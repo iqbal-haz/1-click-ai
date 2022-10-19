@@ -1,6 +1,9 @@
 const axios = require('axios');
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+// const { JSDOM } = require('jsdom');
+// const { window } = new JSDOM("");
+const $ = require("jquery");
 require('dotenv').config();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -58,11 +61,28 @@ ipcMain.handle("get-version", async (event, args) => {
   return process.versions.electron;
 })
 
+// ipcMain.handle("convert-img-to-txt", async (event, data) => {
+//   console.log(data);
+//   let text = await axios.post(
+//     process.env.HOST + "/",
+//     data,
+//   );
+//   return text;
+// })
+
 ipcMain.handle("convert-img-to-txt", async (event, data) => {
   console.log(data);
-  let text = await axios.post(
-    process.env.HOST + "/",
-    data,
-  );
+  let url = process.env.HOST;
+  let text;
+  $.ajax(url + "/", {
+    type: 'POST',
+    data: data,
+    contentType: false,
+    processData: false,
+    success: function(response) {
+      let {img_path, fulltxt} = response;
+      text = fulltxt;
+    }
+  });
   return text;
 })
