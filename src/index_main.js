@@ -61,28 +61,19 @@ ipcMain.handle("get-version", async (event, args) => {
   return process.versions.electron;
 })
 
-// ipcMain.handle("convert-img-to-txt", async (event, data) => {
-//   console.log(data);
-//   let text = await axios.post(
-//     process.env.HOST + "/",
-//     data,
-//   );
-//   return text;
-// })
-
 ipcMain.handle("convert-img-to-txt", async (event, data) => {
   console.log(data);
-  let url = process.env.HOST;
-  let text;
-  $.ajax(url + "/", {
-    type: 'POST',
-    data: data,
-    contentType: false,
-    processData: false,
-    success: function(response) {
-      let {img_path, fulltxt} = response;
-      text = fulltxt;
+  let text; 
+  await axios.post(
+    process.env.HOST + "/",
+    data, {
+      headers: {
+        'content-type': 'multipart/form-data',
+      }
     }
+  ).then((response) => {
+    let { img_path, fulltxt } = response;
+    text = fulltxt;
   });
   return text;
 })
