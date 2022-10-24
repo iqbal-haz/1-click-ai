@@ -61,19 +61,11 @@ ipcMain.handle("get-version", async (event, args) => {
   return process.versions.electron;
 })
 
-ipcMain.handle("convert-img-to-txt", async (event, data) => {
-  console.log(data);
-  let text; 
-  await axios.post(
-    process.env.HOST + "/",
-    data, {
-      headers: {
-        'content-type': 'multipart/form-data',
-      }
-    }
-  ).then((response) => {
-    let { img_path, fulltxt } = response;
-    text = fulltxt;
-  });
-  return text;
+ipcMain.handle("send-back-to-renderer", async (event, content) => {
+  console.log(content);
+  return content;
+})
+
+ipcMain.handle("get-host", (event, args) => {
+  return process.env.HOST;
 })

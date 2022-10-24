@@ -13,9 +13,9 @@
             <h1>OCR</h1>
             <p>Input an image of text and return the text value</p>
         </div>
-        <div class="row my-4" id="form">
+        <div class="row my-4" id="form-div">
             <div id="preview"></div>
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" id="form">
                 <p>
                     <input type="file" name="image" class="form-control" autocomplete="off" required id="image" onchange="previewImage(event)">
                 </p>
@@ -25,6 +25,7 @@
         <div id="result" style="color: blue; font-size: medium;"></div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./ocr_render.js"></script>
 </body>
 </html>

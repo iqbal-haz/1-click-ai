@@ -1,19 +1,73 @@
-$("#extract").on("click", () => {
+$("#extract").on("click", async () => {
     console.log("button clicked -> imageToText render");
     let data = new FormData();
     let image = $("#image")[0].files[0];
     data.append('image', image);
-    console.log(data.entries().next().done);
+    
+    for (let [k, v] of data) console.log(`${k}: ${v}`);
 
-    let result = imageToText(data);
-    document.querySelector("#result").innerHTML = result;
+    let host = await getHost();
+    console.log(host);
+    console.log("test");
+    axios.post(
+        host + "/",
+        data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        }
+      ).then(({ data: result }) => {
+        console.log(result);
+      }).catch(console.error)
+    await new Promise(resolve => setTimeout(resolve, 3000))
+    // console.log(result);
+    await new Promise(resolve => setTimeout(resolve, 3000))
+    // axios.post(
+    //     host + "/",
+    //     data, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //         }
+    // }).then((response) => {
+    //     console.log('inside axios response');
+    //     let { img_path, fulltxt } = response.data;
+    //     console.log(response);
+    //     result = fulltxt;
+    // });
+    // $.ajax({
+    //     url: host + '/',
+    //     type: 'POST',
+    //     data: data,
+    //     contentType: false,
+    //     processData: false,
+    //     success: function(response) {
+    //         console.log('inside ajax success');
+    //         console.log(response);
+    //         let {img_path, fulltxt} = response;
+    //         result = fulltxt;
+    //     },
+    //     error: function(error) {
+    //         console.log(error);
+    //     }
+    // });
+    console.log(result);
+    document.querySelector("#result").innerHTML = await bounce(result);
 });
 
-async function imageToText(data) {
-    console.log('inside imageToText render');
-    console.log(countIter(data.entries()));
-    let result = await window.bridge.imageToText(data);
+/**
+ * @param {*} content 
+ * @returns the exact same thing passed in but has 
+ * sent through the main process and wrapped in promise
+ */
+async function bounce(content) {
+    console.log('inside bounce render');
+    console.log(content);
+    let result = window.bridge.bounce(content);
     return result;
+}
+
+async function getHost() {
+    return await window.bridge.getHost();
 }
 
 function previewImage(event) {

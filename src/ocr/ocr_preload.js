@@ -1,11 +1,12 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 const ocrBridge = {
-    imageToText: (data) => {
+    bounce: (content) => {
         console.log('inside ocrBridge preload');
-        console.log(data.size == null);
-        ipcRenderer.invoke("convert-img-to-txt", data);
-    }
+        console.log(content);
+        ipcRenderer.invoke("send-back-to-renderer", content);
+    },
+    getHost: () => ipcRenderer.invoke("get-host"),
 }
 
 module.exports = {ocrBridge};
