@@ -1,57 +1,76 @@
-$("#extract").on("click", async () => {
-    console.log("button clicked -> imageToText render");
+// $("#extract").on("click", async () => {
+//     console.log("button clicked -> imageToText render");
+//     let data = new FormData();
+//     let image = $("#image")[0].files[0];
+//     data.append('image', image);
+    
+//     for (let [k, v] of data) console.log(`${k}: ${v}`);
+
+//     let host = await getHost();
+//     console.log(host);
+//     console.log("test");
+//     let result;
+
+//     var settings = {
+//         "url": "http://127.0.0.1:5000/",
+//         "method": "POST",
+//         "timeout": 0,
+//         "processData": false,
+//         "mimeType": "multipart/form-data",
+//         "contentType": false,
+//         "data": data,
+//         "error": function(response) {
+//             alert("error")
+//         }
+//     };
+
+//     $.ajax(settings).done(function (response) {
+//         alert("inside ajax");
+//         console.log(response);
+//         result = response;
+//     });
+//     console.log(result);
+//     document.querySelector("#result").innerHTML = await bounce(result);
+// });
+
+const extractBtn = document.getElementById('extract')
+extractBtn.addEventListener("click", function() {
+    console.log("extact button clicked");
     let data = new FormData();
     let image = $("#image")[0].files[0];
     data.append('image', image);
-    
-    for (let [k, v] of data) console.log(`${k}: ${v}`);
+    let result;
 
-    let host = await getHost();
-    console.log(host);
-    console.log("test");
-    axios.post(
-        host + "/",
-        data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        }
-      ).then(({ data: result }) => {
-        console.log(result);
-      }).catch(console.error)
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    // console.log(result);
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    // axios.post(
-    //     host + "/",
-    //     data, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data',
-    //         }
-    // }).then((response) => {
-    //     console.log('inside axios response');
-    //     let { img_path, fulltxt } = response.data;
-    //     console.log(response);
-    //     result = fulltxt;
-    // });
-    // $.ajax({
-    //     url: host + '/',
-    //     type: 'POST',
+    // let ajaxPost = $.ajax("http://127.0.0.1:5000/", {
+    //     method: "POST",
     //     data: data,
+    //     mimeType: "multipart/form-data",
     //     contentType: false,
     //     processData: false,
-    //     success: function(response) {
-    //         console.log('inside ajax success');
-    //         console.log(response);
-    //         let {img_path, fulltxt} = response;
-    //         result = fulltxt;
-    //     },
-    //     error: function(error) {
-    //         console.log(error);
-    //     }
     // });
+    
+    // result = ajaxPost.done(function(data) {
+    //     console.log("inside done");
+    //     console.log(data);
+    // }).fail(function(jqxhr, textStatus, error) {
+    //     console.log("inside fail");
+    //     console.log(jqxhr);
+    //     console.log(error);
+    // }).always(function() {
+    //     console.log("inside always");
+    // });
+    let axiosPost = axios.post("http://127.0.0.1:5000/", data, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    
+    result = axiosPost.then(function(response) {
+        console.log("inside axios then");
+        console.log(response.data);
+    });
+    console.log(axiosPost);
     console.log(result);
-    document.querySelector("#result").innerHTML = await bounce(result);
 });
 
 /**
@@ -61,7 +80,7 @@ $("#extract").on("click", async () => {
  */
 async function bounce(content) {
     console.log('inside bounce render');
-    console.log(content);
+    console.log(typeof content);
     let result = window.bridge.bounce(content);
     return result;
 }
