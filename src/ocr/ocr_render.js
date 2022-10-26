@@ -1,82 +1,18 @@
-// $("#extract").on("click", async () => {
-//     console.log("button clicked -> imageToText render");
-//     let data = new FormData();
-//     let image = $("#image")[0].files[0];
-//     data.append('image', image);
-    
-//     for (let [k, v] of data) console.log(`${k}: ${v}`);
-
-//     let host = await getHost();
-//     console.log(host);
-//     console.log("test");
-//     let result;
-
-//     var settings = {
-//         "url": "http://127.0.0.1:5000/",
-//         "method": "POST",
-//         "timeout": 0,
-//         "processData": false,
-//         "mimeType": "multipart/form-data",
-//         "contentType": false,
-//         "data": data,
-//         "error": function(response) {
-//             alert("error")
-//         }
-//     };
-
-//     $.ajax(settings).done(function (response) {
-//         alert("inside ajax");
-//         console.log(response);
-//         result = response;
-//     });
-//     console.log(result);
-//     document.querySelector("#result").innerHTML = await bounce(result);
-// });
-
 const extractBtn = document.getElementById('extract')
 extractBtn.addEventListener("click", async function() {
-    console.log("extact button clicked");
     let data = new FormData();
     let image = $("#image")[0].files[0];
     data.append('image', image);
-    let axiosRes;
-
-    // let ajaxPost = $.ajax("http://127.0.0.1:5000/", {
-    //     method: "POST",
-    //     data: data,
-    //     mimeType: "multipart/form-data",
-    //     contentType: false,
-    //     processData: false,
-    // });
-    
-    // result = ajaxPost.done(function(data) {
-    //     console.log("inside done");
-    //     console.log(data);
-    // }).fail(function(jqxhr, textStatus, error) {
-    //     console.log("inside fail");
-    //     console.log(jqxhr);
-    //     console.log(error);
-    // }).always(function() {
-    //     console.log("inside always");
-    // });
     const host = await getHost();
 
-    let axiosPost = axios.post(host + '/', data, {
+    axios.post(host + '/', data, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    });
-    
-    axiosRes = axiosPost.then(async function(response) {
-        console.log("inside axios then");
+    }).then(async function(response) {
         let { fulltxt, img_path } = response.data;
-        console.log(fulltxt);
-
-        let result = await bounce(fulltxt);
-        document.getElementById('result').innerHTML = result;
+        document.getElementById('result').innerHTML = await bounce(fulltxt);
     });
-
-    console.log(axiosRes);
 });
 
 /**
@@ -85,12 +21,7 @@ extractBtn.addEventListener("click", async function() {
  * sent through the main process and wrapped in promise
  */
 async function bounce(content) {
-    console.log('inside bounce render');
-    console.log(typeof content);
-    let result = await window.bridge.bounce(content);
-    console.log('result: ');
-    console.log(result);
-    return result;
+    return await window.bridge.bounce(content);
 }
 
 async function getHost() {
@@ -99,17 +30,8 @@ async function getHost() {
 
 function previewImage(event) {
     let image = URL.createObjectURL(event.target.files[0]);
-    console.log(event.target.files[0]);
     let imagediv = document.querySelector("#preview");
     let newimage = document.createElement("img");
     newimage.src = image;
     imagediv.appendChild(newimage);
-}
-
-function countIter(iterator) {
-    let i = 0;
-    while (!iterator.next().done) {
-        i++;
-    }
-    return i;
 }
