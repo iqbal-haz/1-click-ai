@@ -4,7 +4,7 @@ const ocrBridge = {
     bounce: (content) => {
         console.log('inside ocrBridge preload');
         console.log(content);
-        ipcRenderer.invoke("send-back-to-renderer", content);
+        return ipcRenderer.invoke("send-back-to-renderer", content);
     },
     getHost: () => ipcRenderer.invoke("get-host"),
 }

@@ -34,12 +34,12 @@
 // });
 
 const extractBtn = document.getElementById('extract')
-extractBtn.addEventListener("click", function() {
+extractBtn.addEventListener("click", async function() {
     console.log("extact button clicked");
     let data = new FormData();
     let image = $("#image")[0].files[0];
     data.append('image', image);
-    let result;
+    let axiosRes;
 
     // let ajaxPost = $.ajax("http://127.0.0.1:5000/", {
     //     method: "POST",
@@ -59,18 +59,24 @@ extractBtn.addEventListener("click", function() {
     // }).always(function() {
     //     console.log("inside always");
     // });
-    let axiosPost = axios.post("http://127.0.0.1:5000/", data, {
+    const host = await getHost();
+
+    let axiosPost = axios.post(host + '/', data, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     });
     
-    result = axiosPost.then(function(response) {
+    axiosRes = axiosPost.then(async function(response) {
         console.log("inside axios then");
-        console.log(response.data);
+        let { fulltxt, img_path } = response.data;
+        console.log(fulltxt);
+
+        let result = await bounce(fulltxt);
+        document.getElementById('result').innerHTML = result;
     });
-    console.log(axiosPost);
-    console.log(result);
+
+    console.log(axiosRes);
 });
 
 /**
@@ -81,7 +87,9 @@ extractBtn.addEventListener("click", function() {
 async function bounce(content) {
     console.log('inside bounce render');
     console.log(typeof content);
-    let result = window.bridge.bounce(content);
+    let result = await window.bridge.bounce(content);
+    console.log('result: ');
+    console.log(result);
     return result;
 }
 

@@ -62,6 +62,7 @@ ipcMain.handle("get-version", async (event, args) => {
 })
 
 ipcMain.handle("send-back-to-renderer", async (event, content) => {
+  console.log("inside ipcMain handle")
   console.log(content);
   return content;
 })
