@@ -33,5 +33,10 @@ function previewImage(event) {
     let imagediv = document.querySelector("#preview");
     let newimage = document.createElement("img");
     newimage.src = image;
-    imagediv.appendChild(newimage);
+    if (imagediv.firstElementChild == null) {
+        imagediv.appendChild(newimage);
+    } else {
+        let oldImage = imagediv.firstElementChild;
+        oldImage.parentNode.replaceChild(newimage, oldImage);
+    }
 }
