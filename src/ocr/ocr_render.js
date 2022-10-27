@@ -12,7 +12,10 @@ extractBtn.addEventListener("click", async function() {
         }
     }).then(async function(response) {
         let { fulltxt, img_path } = response.data;
-        document.getElementById('result').innerHTML = await bounce(fulltxt);
+        let result = document.getElementById('result');
+        result.style.color = "dodgerblue";
+        result.style.justifyContent = "left";
+        result.innerHTML = await bounce(fulltxt);
     });
 });
 
