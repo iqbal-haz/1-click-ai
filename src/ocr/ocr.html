@@ -6,23 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="ocr.css">
 </head>
 <body>
     <div class="container">
-        <div>
+        <div class="mt-4">
             <h1>OCR</h1>
             <p>Input an image of text and return the text value</p>
         </div>
-        <div class="row my-4" id="form-div">
-            <div id="preview" class="v-25 h-auto"></div>
-            <form method="post" enctype="multipart/form-data" id="form">
-                <p>
-                    <input type="file" name="image" class="form-control" autocomplete="off" required id="image" onchange="previewImage(event)">
-                </p>
-                <input type="button" value="Extract text" class="btn btn-info" id="extract">
-            </form>
+        <div id="img-section">
+            <div class="row" id="form-div">
+                <form method="post" enctype="multipart/form-data" id="form">
+                    <p>
+                        <input type="file" name="image" class="form-control" autocomplete="off" required id="image" onchange="previewImage(event)">
+                    </p>
+                </form>
+            </div>
+            <div class="my-1" id="preview">Your image preview</div>
         </div>
-        <div id="result" style="color: blue; font-size: medium;"></div>
+        <input type="button" value="Extract text" class="btn btn-secondary mt-1" id="extract" disabled>
+        <div class="mt-2" id="result"></div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
