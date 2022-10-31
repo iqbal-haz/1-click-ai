@@ -25,7 +25,7 @@ const createWindow = () => {
 
 app.on('ready', () => {
   createWindow();
-  cp.exec("flask run", {cwd: process.env.OCR_API_PATH});
+  cp.exec("flask run", {cwd: process.env.OCR_API_DIR});
 });
 
 app.on('window-all-closed', () => {
