@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const cp = require('child_process');
 const path = require('path');
 require('dotenv').config();
 
@@ -22,7 +23,10 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  cp.exec("flask run", {cwd: process.env.OCR_API_PATH});
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
